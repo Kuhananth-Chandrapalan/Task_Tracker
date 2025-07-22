@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Task;
+use Illuminate\Support\Facades\Auth;
 
 class TaskManager extends Component
 {
@@ -21,7 +22,7 @@ class TaskManager extends Component
     public function loadTasks()
     {
         try {
-            $this->tasks = Task::all();
+            $this->tasks = Task::where('user_id', Auth::id())->latest()->get();
             $this->error = null;
         } catch (\Exception $e) {
             $this->tasks = [];
@@ -39,6 +40,7 @@ class TaskManager extends Component
         Task::create([
             'title' => $this->title,
             'description' => $this->description,
+            'user_id' => Auth::id(),
         ]);
 
         $this->reset(['title', 'description']);
@@ -47,7 +49,7 @@ class TaskManager extends Component
 
     public function edit($id)
     {
-        $task = Task::findOrFail($id);
+        $task = Task::where('user_id', Auth::id())->findOrFail($id);
         $this->taskId = $task->id;
         $this->title = $task->title;
         $this->description = $task->description;
@@ -60,7 +62,7 @@ class TaskManager extends Component
             'description' => 'nullable|string',
         ]);
 
-        $task = Task::findOrFail($this->taskId);
+        $task = Task::where('user_id', Auth::id())->findOrFail($this->taskId);
         $task->update([
             'title' => $this->title,
             'description' => $this->description,
@@ -72,7 +74,7 @@ class TaskManager extends Component
 
     public function delete($id)
     {
-        Task::destroy($id);
+        Task::where('user_id', Auth::id())->where('id', $id)->delete();
         $this->loadTasks();
     }
 
