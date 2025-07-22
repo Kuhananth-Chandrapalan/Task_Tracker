@@ -12,7 +12,7 @@
         </select>
         <button 
             wire:click="applyFilter"
-            class="text-blue-600 hover:text-blue-800 transition"
+            class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded"
             title="Apply Filter"
         >
             🔍
@@ -46,14 +46,24 @@
         @forelse ($tasks as $index => $task)
             <div class="p-4 rounded-lg border shadow transition duration-300 cursor-pointer 
                 {{ $task->completed ? 'bg-green-100 border-green-400 hover:bg-green-200' : 'bg-gray-100 border-gray-300 hover:bg-gray-200' }}">
-                
+
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm font-semibold {{ $task->completed ? 'text-green-800' : 'text-gray-700' }}">
                         #{{ $index + 1 }}
                     </span>
-                    <div class="flex gap-3 text-sm">
-                        <button wire:click="edit({{ $task->id }})" class="text-blue-600 hover:underline">Edit</button>
-                        <button wire:click="delete({{ $task->id }})" class="text-red-600 hover:underline">Delete</button>
+                    <div class="flex gap-2 text-sm">
+                        <button 
+                            wire:click="edit({{ $task->id }})"
+                            class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-3 py-1 rounded transition duration-150"
+                        >
+                            Edit
+                        </button>
+                        <button 
+                            wire:click="delete({{ $task->id }})"
+                            class="bg-red-600 hover:bg-red-700 text-white font-semibold px-3 py-1 rounded transition duration-150"
+                        >
+                            Delete
+                        </button>
                     </div>
                 </div>
 
