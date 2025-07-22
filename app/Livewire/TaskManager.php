@@ -10,9 +10,15 @@ class TaskManager extends Component
 {
     public $title;
     public $description;
+    public $completed = false;
     public $taskId = null;
-    public $tasks;
+    public $tasks = [];
     public $error = null;
+
+    protected $rules = [
+        'title' => 'required|string',
+        'description' => 'nullable|string',
+    ];
 
     public function mount()
     {
@@ -22,7 +28,9 @@ class TaskManager extends Component
     public function loadTasks()
     {
         try {
-            $this->tasks = Task::where('user_id', Auth::id())->latest()->get();
+            $this->tasks = Task::where('user_id', Auth::id())
+                ->orderBy('created_at', 'asc')
+                ->get();
             $this->error = null;
         } catch (\Exception $e) {
             $this->tasks = [];
@@ -32,18 +40,16 @@ class TaskManager extends Component
 
     public function create()
     {
-        $this->validate([
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-        ]);
+        $this->validate();
 
         Task::create([
             'title' => $this->title,
             'description' => $this->description,
             'user_id' => Auth::id(),
+            'completed' => $this->completed,
         ]);
 
-        $this->reset(['title', 'description']);
+        $this->resetForm();
         $this->loadTasks();
     }
 
@@ -53,29 +59,60 @@ class TaskManager extends Component
         $this->taskId = $task->id;
         $this->title = $task->title;
         $this->description = $task->description;
+        $this->completed = $task->completed;
     }
 
     public function update()
     {
-        $this->validate([
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-        ]);
+        $this->validate();
 
         $task = Task::where('user_id', Auth::id())->findOrFail($this->taskId);
         $task->update([
             'title' => $this->title,
             'description' => $this->description,
+            'completed' => $this->completed,
         ]);
 
-        $this->reset(['title', 'description', 'taskId']);
+        $this->resetForm();
         $this->loadTasks();
     }
 
     public function delete($id)
     {
-        Task::where('user_id', Auth::id())->where('id', $id)->delete();
+        Task::where('user_id', Auth::id())
+            ->where('id', $id)
+            ->delete();
+
         $this->loadTasks();
+    }
+
+    public function toggleCompleted($id)
+    {
+        $task = Task::where('user_id', Auth::id())->findOrFail($id);
+        $task->completed = !$task->completed;
+        $task->save();
+
+        $this->loadTasks();
+    }
+
+    public function cancel()
+    {
+        $this->resetForm();
+    }
+
+    private function resetForm()
+    {
+        $this->reset(['title', 'description', 'completed', 'taskId']);
+    }
+
+    public function getCompletedCountProperty()
+    {
+        return $this->tasks->where('completed', true)->count();
+    }
+
+    public function getTotalCountProperty()
+    {
+        return $this->tasks->count();
     }
 
     public function render()

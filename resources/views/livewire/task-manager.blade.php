@@ -1,31 +1,67 @@
-<div class="max-w-2xl mx-auto p-4">
-    <form wire:submit.prevent="{{ $taskId ? 'update' : 'create' }}" class="space-y-4">
-        <input type="text" wire:model="title" placeholder="Task Title" class="w-full border p-2 rounded" />
-        <textarea wire:model="description" placeholder="Description" class="w-full border p-2 rounded"></textarea>
+<div class="max-w-4xl mx-auto p-6 bg-white shadow-lg rounded-xl">
+    <h2 class="text-2xl font-semibold flex items-center gap-2 mb-6">
+        📝 Task Dashboard
+    </h2>
 
-        <button type="submit" class="bg-blue-600 text-white px-4 py-2 rounded">
+    <!-- Form -->
+    <form wire:submit.prevent="{{ $taskId ? 'update' : 'create' }}" class="space-y-4 mb-8">
+        <input 
+            type="text" 
+            wire:model="title" 
+            placeholder="Enter Task Title" 
+            class="w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 p-3 rounded-lg"
+        />
+        <textarea 
+            wire:model="description" 
+            placeholder="Enter Task Description" 
+            class="w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 p-3 rounded-lg"
+        ></textarea>
+
+       
+
+        <button 
+            type="submit" 
+            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow font-semibold transition"
+        >
             {{ $taskId ? 'Update Task' : 'Create Task' }}
         </button>
     </form>
 
-    <div class="mt-6">
-        @if ($error)
-            <p class="text-red-600">{{ $error }}</p>
-        @else
-            @forelse ($tasks as $task)
-                <div class="mt-4 p-4 border rounded shadow-sm flex justify-between items-center">
-                    <div>
-                        <h4 class="text-lg font-semibold">{{ $task->title }}</h4>
-                        <p class="text-gray-600">{{ $task->description }}</p>
-                    </div>
-                    <div class="flex gap-2">
-                        <button wire:click="edit({{ $task->id }})" class="text-blue-500 hover:underline">Edit</button>
-                        <button wire:click="delete({{ $task->id }})" class="text-red-500 hover:underline">Delete</button>
+    <!-- Task List -->
+    <div class="grid grid-cols-1 gap-4">
+        @forelse ($tasks as $index => $task)
+            <div class="p-4 rounded-lg border shadow transition duration-300 cursor-pointer 
+                {{ $task->completed 
+                    ? 'bg-green-100 border-green-400 hover:bg-green-200' 
+                    : 'bg-gray-100 border-gray-300 hover:bg-gray-200' }}">
+                
+                <div class="flex justify-between items-center mb-2">
+                    <span class="text-sm font-semibold {{ $task->completed ? 'text-green-800' : 'text-gray-700' }}">
+                        #{{ $index + 1 }}
+                    </span>
+                    <div class="flex gap-3 text-sm">
+                        <button wire:click="edit({{ $task->id }})" class="text-blue-600 hover:underline">Edit</button>
+                        <button wire:click="delete({{ $task->id }})" class="text-red-600 hover:underline">Delete</button>
                     </div>
                 </div>
-            @empty
-                <p class="text-gray-500 mt-4">No tasks available.</p>
-            @endforelse
-        @endif
+
+                <h3 class="text-lg font-semibold text-gray-900">{{ $task->title }}</h3>
+                <p class="text-sm text-gray-700 mb-2">{{ $task->description }}</p>
+
+                <label class="inline-flex items-center gap-2">
+                    <input 
+                        type="checkbox" 
+                        wire:change="toggleCompleted({{ $task->id }})" 
+                        class="form-checkbox text-green-600"
+                        {{ $task->completed ? 'checked' : '' }}
+                    >
+                    <span class="{{ $task->completed ? 'bg-green-100 border-green-400 hover:bg-green-200' : 'text-gray-600' }}">
+                        {{ $task->completed ? 'Completed' : 'Mark as Completed' }}
+                    </span>
+                </label>
+            </div>
+        @empty
+            <p class="text-gray-500">No tasks found.</p>
+        @endforelse
     </div>
 </div>
