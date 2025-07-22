@@ -56,7 +56,7 @@ class TaskManager extends Component
         $this->loadTasks();
 
         $this->dispatch('taskNotify', type: 'success', message: 'Task created successfully!');
-;
+
     }
 
     public function edit($id)
