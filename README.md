@@ -61,14 +61,13 @@ If you discover a security vulnerability within Laravel, please send an e-mail t
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
 =======
-# Task_Tracker
-Task tracker using Laravel with Filament and Livewire. The system should  allow users to create, update, and delete tasks while providing real-time updates when tasks  are modified.
-# 📝 Task Tracker - Laravel Developer Intern Assignment
 
-A sleek and interactive task tracking application built with **Laravel**, **Livewire**, **TailwindCSS**, and **MySQL**.  
-This system supports real-time task management, filtering, and modern UI enhancements.
+# ✅ Laravel Task Tracker
+
+A simple task tracking application built with **Laravel 12** and **Livewire 3**, allowing users to create, update, filter, and manage tasks with real-time toast notifications.
 
 ---
+
 
 ## 🚀 Features
 
@@ -76,52 +75,137 @@ This system supports real-time task management, filtering, and modern UI enhance
 - ✅ Create, Edit, Delete tasks
 - ✅ Mark tasks as **Completed**
 - ✅ Task list filtering (All, Completed, Not Completed)
-- ✅ Interactive UI with TailwindCSS
+- ✅ MySQL-compatible schema
 - ✅ Real-time updates using **Livewire**
 - ✅ Glassmorphism styled **Welcome Page**
 - ✅ Clean and responsive design
 
 ---
 
-## 📸 Screenshots
+---
 
-| Welcome Page | Task Dashboard |
-<img width="1918" height="964" alt="image" src="https://github.com/user-attachments/assets/99593791-332a-4b62-9d48-8f1aca6c2225" />
+## 🚀 Tech Stack
 
-<img width="1919" height="945" alt="image" src="https://github.com/user-attachments/assets/b372835b-0c15-44ff-ad3a-04b8bcb823ff" />
+- Laravel 12
+- Livewire 3
+- Tailwind CSS
+- MySQL (XAMPP)
+- SQLite (dev)
+- PHP 8.2+
 
+---
+
+## 🛠️ Prerequisites
+
+Before starting, make sure you have:
+
+- [XAMPP](https://www.apachefriends.org/index.html) installed and running
+- [Composer](https://getcomposer.org/) installed
+- [Git](https://git-scm.com/) (optional but helpful)
+- [Node.js](https://nodejs.org/) (for frontend build)
+- A code editor like VS Code
 
 ---
 
 ## ⚙️ Installation
 
+### 1. 🧬 Clone the Repository
+
 ```bash
-# Clone the repository
-git clone https://github.com/your-username/task-tracker.git
-cd task-tracker
+git clone https://github.com/YOUR_USERNAME/Task_Tracker.git
+cd Task_Tracker
+```
 
-# Install dependencies
+### 2. 🧩 Install PHP Dependencies
+
+```bash
 composer install
-npm install && npm run dev
+```
 
-# Copy and configure your .env
+### 3. 🧑‍🎨 Install JS/CSS Dependencies
+
+```bash
+npm install
+npm run build
+```
+
+> Or use `npm run dev` if you're actively developing
+
+---
+
+## 🔌 Configure Environment
+
+### 4. 🧾 Copy `.env` File
+
+```bash
 cp .env.example .env
+```
+
+### 5. 🔑 Generate App Key
+
+```bash
 php artisan key:generate
+```
 
-# Set your DB credentials in .env and run:
+---
+
+## 🗃️ Database Setup (XAMPP MySQL)
+
+### 6. ✅ Start Apache and MySQL from XAMPP Control Panel
+
+### 7. 💽 Create a Database
+
+Go to [http://localhost/phpmyadmin](http://localhost/phpmyadmin) and:
+
+- Click "New"
+- Name it `task_tracker`
+- Click "Create"
+
+### 8. 🧬 Update `.env`
+
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=task_tracker
+DB_USERNAME=root
+DB_PASSWORD=
+```
+
+---
+
+## 🧱 Run Migrations
+
+```bash
 php artisan migrate
+```
 
-# Start the server
+> This will create tables like `users`, `tasks`, etc.
+
+---
+
+## 🔓 Optional: Add Authentication (if not added)
+
+If you're using Laravel Breeze:
+
+```bash
+composer require laravel/breeze --dev
+php artisan breeze:install
+npm install && npm run build
+php artisan migrate
+```
+
+---
+
+## ▶️ Run the App
+
+```bash
 php artisan serve
 ```
 
-##  Testing
-Register or login via the welcome page.
+Visit: [http://127.0.0.1:8000](http://127.0.0.1:8000)
 
-Create tasks and mark them completed.
-
-Try filtering and editing tasks.
-
+---
 ##  Folder Structure Highlights
 app/Livewire/TaskManager.php - Task logic (CRUD, filtering)
 
@@ -131,6 +215,66 @@ resources/views/welcome.blade.php - Glass-style landing
 
 routes/web.php - Route configuration
 
+
+--
+
+## 🎨 Project Structure
+
+```bash
+app/
+├── Http/
+│   └── Livewire/
+│       └── TaskManager.php
+resources/
+└── views/
+    └── livewire/
+        └── task-manager.blade.php
+database/
+├── migrations/
+│   ├── create_users_table.php
+│   ├── create_tasks_table.php
+│   └── add_completed_to_tasks_table.php
+```
+
+---
+
+## ✅ Sample User Flow
+
+1. Register/Login
+2. Create tasks using the form
+3. Filter tasks (All / Completed / Not Completed)
+4. Edit, mark complete/incomplete, or delete
+5. See real-time feedback via toast notifications
+
+---
+##  Testing
+Register or login via the welcome page.
+
+Create tasks and mark them completed.
+
+Try filtering and editing tasks.
+
+
+
+## ✅ Screenshots
+| Welcome Page | Task Dashboard |
+<img width="1918" height="964" alt="image" src="https://github.com/user-attachments/assets/99593791-332a-4b62-9d48-8f1aca6c2225" />
+<img width="1919" height="985" alt="image" src="https://github.com/user-attachments/assets/d96c3cc0-9e0b-4139-aa85-8c4590685fcd" />
+
+
+---
+
+
+
+---
+
+## 🧑‍💻 Developer Notes
+
+- Use `php artisan tinker` for quick DB testing
+- Use `php artisan migrate:fresh --seed` to reset the database
+
+---
+
 ##  Credits
 This application was built as part of a associate software engineer assignment.
 Styled using TailwindCSS with glass effect and icons.
@@ -139,6 +283,6 @@ Styled using TailwindCSS with glass effect and icons.
 Kuhananth Chandrapalan
 Email: kuhananthchandrapalan2001@gmail.com
 GitHub: Kuhananth-Chandrapalan
---
+
 
 
