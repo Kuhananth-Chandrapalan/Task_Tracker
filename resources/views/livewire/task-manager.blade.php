@@ -49,7 +49,7 @@
 
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm font-semibold {{ $task->completed ? 'text-green-800' : 'text-gray-700' }}">
-                        #{{ $index + 1 }}
+                        Task {{ $index + 1 }}
                     </span>
                     <div class="flex gap-2 text-sm">
                         <button 
@@ -86,4 +86,43 @@
             <p class="text-gray-500">No tasks found.</p>
         @endforelse
     </div>
+
+    <!-- Toast Notification Script -->
+<script>
+    document.addEventListener('livewire:init', () => {
+        Livewire.on('taskNotify', ({ type, message }) => {
+            console.log("🔥 Notification received:", type, message);
+
+            const toast = document.createElement('div');
+
+            toast.textContent = message;
+            toast.style.position = 'fixed';
+            toast.style.bottom = '20px';
+            toast.style.right = '20px';
+            toast.style.padding = '16px 24px';
+            toast.style.backgroundColor = type === 'success' ? '#22c55e' : '#3b82f6';
+            toast.style.color = '#fff';
+            toast.style.fontWeight = 'bold';
+            toast.style.borderRadius = '8px';
+            toast.style.boxShadow = '0 4px 10px rgba(0,0,0,0.2)';
+            toast.style.zIndex = '99999';
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.4s ease';
+
+            document.body.appendChild(toast);
+
+            // Force visible
+            requestAnimationFrame(() => {
+                toast.style.opacity = '1';
+            });
+
+            // Auto-remove
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        });
+    });
+</script>
+
 </div>

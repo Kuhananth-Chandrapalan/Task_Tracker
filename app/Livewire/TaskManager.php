@@ -54,6 +54,9 @@ class TaskManager extends Component
 
         $this->reset(['title', 'description', 'completed']);
         $this->loadTasks();
+
+        $this->dispatch('taskNotify', type: 'success', message: 'Task created successfully!');
+;
     }
 
     public function edit($id)
@@ -81,6 +84,8 @@ class TaskManager extends Component
 
         $this->reset(['title', 'description', 'taskId', 'completed']);
         $this->loadTasks();
+
+        $this->dispatch('taskNotify', type: 'info', message: 'Task updated successfully!');
     }
 
     public function delete($id)
