@@ -63,4 +63,82 @@ The Laravel framework is open-sourced software licensed under the [MIT license](
 =======
 # Task_Tracker
 Task tracker using Laravel with Filament and Livewire. The system should  allow users to create, update, and delete tasks while providing real-time updates when tasks  are modified.
->>>>>>> 23e961b7655e6d8024b1fee92c614940b2fdb362
+# 📝 Task Tracker - Laravel Developer Intern Assignment
+
+A sleek and interactive task tracking application built with **Laravel**, **Livewire**, **TailwindCSS**, and **MySQL**.  
+This system supports real-time task management, filtering, and modern UI enhancements.
+
+---
+
+## 🚀 Features
+
+- ✅ User Authentication (Login & Register)
+- ✅ Create, Edit, Delete tasks
+- ✅ Mark tasks as **Completed**
+- ✅ Task list filtering (All, Completed, Not Completed)
+- ✅ Interactive UI with TailwindCSS
+- ✅ Real-time updates using **Livewire**
+- ✅ Glassmorphism styled **Welcome Page**
+- ✅ Clean and responsive design
+
+---
+
+## 📸 Screenshots
+
+| Welcome Page | Task Dashboard |
+<img width="1918" height="964" alt="image" src="https://github.com/user-attachments/assets/99593791-332a-4b62-9d48-8f1aca6c2225" />
+
+<img width="1919" height="945" alt="image" src="https://github.com/user-attachments/assets/b372835b-0c15-44ff-ad3a-04b8bcb823ff" />
+
+
+---
+
+## ⚙️ Installation
+
+```bash
+# Clone the repository
+git clone https://github.com/your-username/task-tracker.git
+cd task-tracker
+
+# Install dependencies
+composer install
+npm install && npm run dev
+
+# Copy and configure your .env
+cp .env.example .env
+php artisan key:generate
+
+# Set your DB credentials in .env and run:
+php artisan migrate
+
+# Start the server
+php artisan serve
+```
+
+##  Testing
+Register or login via the welcome page.
+
+Create tasks and mark them completed.
+
+Try filtering and editing tasks.
+
+##  Folder Structure Highlights
+app/Livewire/TaskManager.php - Task logic (CRUD, filtering)
+
+resources/views/livewire/task-manager.blade.php - Main UI
+
+resources/views/welcome.blade.php - Glass-style landing
+
+routes/web.php - Route configuration
+
+##  Credits
+This application was built as part of a associate software engineer assignment.
+Styled using TailwindCSS with glass effect and icons.
+
+##  Author
+Kuhananth Chandrapalan
+Email: kuhananthchandrapalan2001@gmail.com
+GitHub: Kuhananth-Chandrapalan
+--
+
+
