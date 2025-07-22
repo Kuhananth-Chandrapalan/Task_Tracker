@@ -13,34 +13,37 @@ class TaskManager extends Component
     public $completed = false;
     public $taskId = null;
     public $tasks = [];
-    public $error = null;
-
-    protected $rules = [
-        'title' => 'required|string',
-        'description' => 'nullable|string',
-    ];
+    public $filter = 'all';
 
     public function mount()
     {
         $this->loadTasks();
     }
 
+    public function applyFilter()
+    {
+        $this->loadTasks();
+    }
+
     public function loadTasks()
     {
-        try {
-            $this->tasks = Task::where('user_id', Auth::id())
-                ->orderBy('created_at', 'asc')
-                ->get();
-            $this->error = null;
-        } catch (\Exception $e) {
-            $this->tasks = [];
-            $this->error = 'Tasks failed to load.';
+        $query = Task::where('user_id', Auth::id());
+
+        if ($this->filter === 'completed') {
+            $query->where('completed', true);
+        } elseif ($this->filter === 'not_completed') {
+            $query->where('completed', false);
         }
+
+        $this->tasks = $query->orderBy('created_at', 'asc')->get();
     }
 
     public function create()
     {
-        $this->validate();
+        $this->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
 
         Task::create([
             'title' => $this->title,
@@ -49,7 +52,7 @@ class TaskManager extends Component
             'completed' => $this->completed,
         ]);
 
-        $this->resetForm();
+        $this->reset(['title', 'description', 'completed']);
         $this->loadTasks();
     }
 
@@ -64,7 +67,10 @@ class TaskManager extends Component
 
     public function update()
     {
-        $this->validate();
+        $this->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
 
         $task = Task::where('user_id', Auth::id())->findOrFail($this->taskId);
         $task->update([
@@ -73,16 +79,13 @@ class TaskManager extends Component
             'completed' => $this->completed,
         ]);
 
-        $this->resetForm();
+        $this->reset(['title', 'description', 'taskId', 'completed']);
         $this->loadTasks();
     }
 
     public function delete($id)
     {
-        Task::where('user_id', Auth::id())
-            ->where('id', $id)
-            ->delete();
-
+        Task::where('user_id', Auth::id())->where('id', $id)->delete();
         $this->loadTasks();
     }
 
@@ -91,28 +94,7 @@ class TaskManager extends Component
         $task = Task::where('user_id', Auth::id())->findOrFail($id);
         $task->completed = !$task->completed;
         $task->save();
-
         $this->loadTasks();
-    }
-
-    public function cancel()
-    {
-        $this->resetForm();
-    }
-
-    private function resetForm()
-    {
-        $this->reset(['title', 'description', 'completed', 'taskId']);
-    }
-
-    public function getCompletedCountProperty()
-    {
-        return $this->tasks->where('completed', true)->count();
-    }
-
-    public function getTotalCountProperty()
-    {
-        return $this->tasks->count();
     }
 
     public function render()

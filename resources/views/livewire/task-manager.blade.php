@@ -3,7 +3,23 @@
         📝 Task Dashboard
     </h2>
 
-    <!-- Form -->
+    <!-- Filter Dropdown and Icon Button -->
+    <div class="flex items-center gap-3 mb-4">
+        <select wire:model.defer="filter" class="border border-gray-300 rounded-lg px-3 py-2">
+            <option value="all">All Tasks</option>
+            <option value="completed">Completed</option>
+            <option value="not_completed">Not Completed</option>
+        </select>
+        <button 
+            wire:click="applyFilter"
+            class="text-blue-600 hover:text-blue-800 transition"
+            title="Apply Filter"
+        >
+            🔍
+        </button>
+    </div>
+
+    <!-- Task Form -->
     <form wire:submit.prevent="{{ $taskId ? 'update' : 'create' }}" class="space-y-4 mb-8">
         <input 
             type="text" 
@@ -17,8 +33,6 @@
             class="w-full border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 p-3 rounded-lg"
         ></textarea>
 
-       
-
         <button 
             type="submit" 
             class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-md shadow font-semibold transition"
@@ -31,9 +45,7 @@
     <div class="grid grid-cols-1 gap-4">
         @forelse ($tasks as $index => $task)
             <div class="p-4 rounded-lg border shadow transition duration-300 cursor-pointer 
-                {{ $task->completed 
-                    ? 'bg-green-100 border-green-400 hover:bg-green-200' 
-                    : 'bg-gray-100 border-gray-300 hover:bg-gray-200' }}">
+                {{ $task->completed ? 'bg-green-100 border-green-400 hover:bg-green-200' : 'bg-gray-100 border-gray-300 hover:bg-gray-200' }}">
                 
                 <div class="flex justify-between items-center mb-2">
                     <span class="text-sm font-semibold {{ $task->completed ? 'text-green-800' : 'text-gray-700' }}">
@@ -55,7 +67,7 @@
                         class="form-checkbox text-green-600"
                         {{ $task->completed ? 'checked' : '' }}
                     >
-                    <span class="{{ $task->completed ? 'bg-green-100 border-green-400 hover:bg-green-200' : 'text-gray-600' }}">
+                    <span class="{{ $task->completed ? 'text-green-800 font-semibold' : 'text-gray-600' }}">
                         {{ $task->completed ? 'Completed' : 'Mark as Completed' }}
                     </span>
                 </label>
