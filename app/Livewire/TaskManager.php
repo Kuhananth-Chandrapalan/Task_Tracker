@@ -15,6 +15,28 @@ class TaskManager extends Component
     public $tasks = [];
     public $filter = 'all';
 
+
+    public function create()
+    {
+        $this->validate([
+            'title' => 'required|string',
+            'description' => 'nullable|string',
+        ]);
+
+        Task::create([
+            'title' => $this->title,
+            'description' => $this->description,
+            'user_id' => Auth::id(),
+            'completed' => $this->completed,
+        ]);
+
+        $this->reset(['title', 'description', 'completed']);
+        $this->loadTasks();
+
+        $this->dispatch('taskNotify', type: 'success', message: 'Task created successfully!');
+
+    }
+
     public function mount()
     {
         $this->loadTasks();
@@ -38,26 +60,7 @@ class TaskManager extends Component
         $this->tasks = $query->orderBy('created_at', 'asc')->get();
     }
 
-    public function create()
-    {
-        $this->validate([
-            'title' => 'required|string',
-            'description' => 'nullable|string',
-        ]);
-
-        Task::create([
-            'title' => $this->title,
-            'description' => $this->description,
-            'user_id' => Auth::id(),
-            'completed' => $this->completed,
-        ]);
-
-        $this->reset(['title', 'description', 'completed']);
-        $this->loadTasks();
-
-        $this->dispatch('taskNotify', type: 'success', message: 'Task created successfully!');
-
-    }
+    
 
     public function edit($id)
     {
